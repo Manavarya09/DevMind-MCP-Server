@@ -107,3 +107,10 @@ dmypy.json
 
 # Database
 devmind.db
+*.db
+
+# PyCache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd

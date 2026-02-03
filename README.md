@@ -22,8 +22,8 @@ This allows AI assistants to answer sophisticated questions like:
 
 1. Clone this repository:
 ```bash
-git clone https://github.com/yourusername/devmind-mcp.git
-cd devmind-mcp
+git clone https://github.com/Manavarya09/DevMind-MCP-Server.git
+cd DevMind-MCP-Server
 ```
 
 2. Install dependencies:
