@@ -13,12 +13,14 @@ from typing import Dict, Any, List
 from context.analyzer import ProjectAnalyzer
 from storage.db import Database
 from tools.registry import ToolRegistry
+from analyzers.git_analyzer import GitAnalyzer
 
 class DevMindMCPServer:
     def __init__(self):
         self.analyzer = ProjectAnalyzer()
         self.db = Database()
-        self.tools = ToolRegistry(self.analyzer, self.db)
+        self.git_analyzer = GitAnalyzer()
+        self.tools = ToolRegistry(self.analyzer, self.db, self.git_analyzer)
 
     async def handle_request(self, request: Dict[str, Any]) -> Dict[str, Any]:
         """Handle an MCP request."""
@@ -85,6 +87,10 @@ class DevMindMCPServer:
         self.analyzer.index_project(project_root)
         self.db.save_project_data(self.analyzer.get_data())
 
+        # Index git data
+        commits = self.git_analyzer.get_recent_commits(50)  # Get more for storage
+        self.db.save_git_data(commits)
+
         # Read from stdin, write to stdout
         while True:
             try:
@@ -100,5 +106,10 @@ class DevMindMCPServer:
                 break
 
 if __name__ == "__main__":
+    server = DevMindMCPServer()
+    asyncio.run(server.run())
+
+def main():
+    """Entry point for the devmind-mcp command."""
     server = DevMindMCPServer()
     asyncio.run(server.run())
